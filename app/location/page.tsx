@@ -12,7 +12,7 @@ export default function Location() {
         (async()=>{
             const { state } = await navigator.permissions.query({ name: 'geolocation' })
             setPermission(state)
-            if(state === 'granted') {
+            if(state === 'granted' || state === 'prompt') {
                 noSleep.enable();
             }
     
