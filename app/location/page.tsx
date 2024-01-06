@@ -1,15 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react'
+import NoSleep from 'nosleep.js';
 
 export default function Location() {
     const [location, setLocation] = useState<any>()
     const [error, setError] = useState<any>()
     const [permission, setPermission] = useState<string>()
     useEffect(() => {
+        const noSleep = new NoSleep();
         (async()=>{
             const { state } = await navigator.permissions.query({ name: 'geolocation' })
             setPermission(state)
+            if(state === 'granted') {
+                noSleep.enable();
+            }
     
             navigator.geolocation.watchPosition(
                 (position) => {
@@ -21,6 +26,10 @@ export default function Location() {
                     setError(error)
                 }
             )
+
+            return () => {
+                noSleep.disable();
+            }
         })();
     }, [])
     return <>
