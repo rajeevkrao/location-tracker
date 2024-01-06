@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import NoSleep from 'nosleep.js';
+import axios from 'axios';
 
 export default function Location() {
     const [location, setLocation] = useState<any>()
@@ -17,9 +18,15 @@ export default function Location() {
             }
     
             navigator.geolocation.watchPosition(
-                (position) => {
-                    console.log(position)
-                    setLocation(position)
+                async (position) => {
+                    try {
+                        const { coords, timestamp } = position;
+                        const { latitude, longitude } = coords; 
+                        await axios.post('/api/updateLocation', {latitude, longitude, timestamp})
+                        setLocation(position)
+                    } catch (err) {
+                        console.log(err);
+                    }   
                 },
                 (error) => {
                     console.log(error)
