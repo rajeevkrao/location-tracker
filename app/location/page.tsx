@@ -31,6 +31,9 @@ export default function Location() {
                 (error) => {
                     console.log(error)
                     setError(error)
+                },
+                {
+                    enableHighAccuracy: true,
                 }
             )
 
