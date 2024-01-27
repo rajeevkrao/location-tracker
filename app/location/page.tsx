@@ -3,8 +3,11 @@
 import { useState, useEffect } from 'react'
 import NoSleep from 'nosleep.js';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 export default function Location() {
+    const router = useRouter();
+
     const [location, setLocation] = useState<any>()
     const [error, setError] = useState<any>()
     const [permission, setPermission] = useState<string>()
@@ -24,7 +27,8 @@ export default function Location() {
                         const { latitude, longitude } = coords; 
                         await axios.post('/api/updateLocation', {latitude, longitude, timestamp})
                         setLocation(position)
-                    } catch (err) {
+                    } catch (err:any) {
+                        if(err?.response?.status === 401) return router.push('/');
                         console.log(err);
                     }   
                 },

@@ -11,6 +11,7 @@ export default function Home() {
   
   const startLocation = async () => {
     try {  
+      if (!name) return alert('Please enter your name to identify yourself');
       await axios.get('/api/setName?name=' + name);
       router.push('/location');
     }
